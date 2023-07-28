@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import datetime
 import os.path
 
 from google.auth.transport.requests import Request
@@ -9,7 +10,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = ['https://www.googleapis.com/auth/calendar']
+SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+
 
 def main():
     """Shows basic usage of the Google Calendar API.
@@ -36,32 +38,22 @@ def main():
     try:
         service = build('calendar', 'v3', credentials=creds)
 
-        event = {
-          'summary': 'Veivel Ganteng',
-          'location': '800 Howard St., San Francisco, CA 94103',
-          'description': 'A chance to hear more about Google\'s developer products.',
-          'start': {
-            'dateTime': '2023-07-30T09:00:00-07:00',
-            'timeZone': 'Asia/Jakarta',
-          },
-          'end': {
-            'dateTime': '2023-07-30T10:00:00-07:00',
-            'timeZone': 'Asia/Jakarta',
-          },
-          'attendees': [
-            {'email': 'arkan.alexei@ui.ac.id'}
-          ],
-          'reminders': {
-            'useDefault': False,
-            'overrides': [
-              {'method': 'email', 'minutes': 24 * 60},
-              {'method': 'popup', 'minutes': 10},
-            ],
-          },
-        }
+        # Call the Calendar API
+        now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+        print('Getting the upcoming 10 events')
+        events_result = service.events().list(calendarId='primary', timeMin=now,
+                                              maxResults=10, singleEvents=True,
+                                              orderBy='startTime').execute()
+        events = events_result.get('items', [])
 
-        event = service.events().insert(calendarId='primary', body=event).execute()
-        print('Event created: %s' % (event.get('htmlLink')))
+        if not events:
+            print('No upcoming events found.')
+            return
+
+        # Prints the start and name of the next 10 events
+        for event in events:
+            start = event['start'].get('dateTime', event['start'].get('date'))
+            print(start, event['summary'])
 
     except HttpError as error:
         print('An error occurred: %s' % error)

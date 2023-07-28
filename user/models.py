@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -56,3 +58,12 @@ class Advisor(models.Model):
         return self.user.username
 
 
+class Appointment(models.Model):
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="customer")
+    advisor = models.ForeignKey(Advisor, on_delete=models.CASCADE, related_name="advisor")
+    meet_url = models.TextField(default="")
+    start_time = models.DateTimeField()
+
+    @property
+    def end_time(self):
+        return self.start_time + timedelta(hours=1)
