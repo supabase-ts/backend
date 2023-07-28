@@ -32,13 +32,10 @@ class AppointmentAPIView(GenericAPIView):
             "receiverAccountNo": advisor.user.account_no,
             "amount": price
         }
-        print("Transaction data:", transaction_data)
         headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
         response = requests.post(transaction_url, headers=headers, json=transaction_data)
-        print("Transaction response:", response)
         if response.status_code != 200:
             return Response({"error": "Transaction failed"}, status=status.HTTP_400_BAD_REQUEST)
-        print(response.json())
 
         # Create Google Meet event
         meet_url = self.create_meet_event(customer.email, advisor.user.email, start_time)
