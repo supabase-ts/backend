@@ -14,7 +14,6 @@ class User(AbstractUser):
 
     # Helper fields
     account_no = models.CharField(max_length=255, unique=True, blank=True, null=True)
-    balance = models.IntegerField(default=0)
     is_advisor = models.BooleanField(default=False)
     birth_date = models.CharField(max_length=255, blank=True, null=True)
     gender = models.IntegerField(default=1)

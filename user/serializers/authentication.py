@@ -32,7 +32,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         return super().to_internal_value(data)
 
     def validate(self, attrs):
-        url = "http://34.101.154.14:8175/hackathon/user/auth/create"
+        # Register
+        url_register = "http://34.101.154.14:8175/hackathon/user/auth/create"
+        url_login = "http://34.101.154.14:8175/hackathon/user/auth/token"
         payload = {
             "ktpId": attrs['ktp_id'],
             "username": attrs['username'],
@@ -45,10 +47,18 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
         headers = {'Content-Type': 'application/json'}
-        response = requests.post(url, headers=headers, json=payload)
+        response = requests.post(url_register, headers=headers, json=payload)
 
         if not response.json()['success']:
             raise serializers.ValidationError('Error in external registration')
+
+        login_payload = {"username": attrs['username'], "loginPassword": attrs['password']}
+        login_response = requests.post(url_login, headers=headers, json=login_payload)
+        login_data = login_response.json()
+        if login_response.status_code == 200 and login_data['success']:
+            attrs['token'] = login_data['data']['accessToken']
+        else:
+            raise serializers.ValidationError('Error in getting token after registration')
 
         return attrs
 
@@ -58,6 +68,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         # If the user is an advisor, create an Advisor instance
         if validated_data.get('is_advisor', False):
             Advisor.objects.create(user=user)
+
+        # Create bank account for the user
+        url = "http://34.101.154.14:8175/hackathon/bankAccount/create"
+        payload = {"balance": 0}  # Initially set the balance to 0
+        headers = {'Authorization': f'Bearer {user.token}', 'Content-Type': 'application/json'}
+        response = requests.post(url, headers=headers, json=payload)
+
+        if response.status_code == 200:
+            data = response.json()
+            if data['success']:
+                user.account_no = data['data']['accountNo']
+                user.save()
+            else:
+                raise serializers.ValidationError('Error in external bank account creation')
+        else:
+            raise serializers.ValidationError('Error in external bank account creation')
 
         return user
 
