@@ -71,8 +71,6 @@ class AppointmentAPIView(GenericAPIView):
             start_time_str = self.start_to_gmt_7(start_time)
             end_time_str = self.add_one_hour(start_time)
 
-            print("Start time:", start_time_str)
-            print("End time:", end_time_str)
             event = {
                 'summary': 'Financial Advisor Meet',
                 'description': 'A chance to hear more about Google\'s developer products.',
