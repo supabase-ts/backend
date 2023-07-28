@@ -1,18 +1,11 @@
-from datetime import datetime
-
-import requests
-from django.contrib.auth.models import User
 from rest_framework import status
-from rest_framework.decorators import api_view
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from user.serializers import RegisterSerializer, LoginSerializer
+from user.serializers.authentication import RegisterSerializer, LoginSerializer
 
 
 class RegisterAPIView(GenericAPIView):
-    permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
     def post(self, request):
