@@ -8,14 +8,17 @@ class User(AbstractUser):
     first_name = None
     last_name = None
     # Mandatory fields to prevent duplication user
+    username = models.CharField(max_length=255, unique=True)
     ktp_id = models.CharField(max_length=255, unique=True)
     phone_number = models.CharField(max_length=255, unique=True)
 
     # Helper fields
     account_no = models.CharField(max_length=255, unique=True, blank=True, null=True)
-    balance = models.IntegerField(default=0, blank=True, null=True)
+    balance = models.IntegerField(default=0)
     is_advisor = models.BooleanField(default=False)
-
+    birth_date = models.CharField(max_length=255, blank=True, null=True)
+    gender = models.IntegerField(default=1)
+    token = models.CharField(max_length=500, null=True, blank=True) # assuming the token is stored here
 
     USERNAME_FIELD = "username"
 
