@@ -63,7 +63,3 @@ class Appointment(models.Model):
     advisor = models.ForeignKey(Advisor, on_delete=models.CASCADE, related_name="advisor")
     meet_url = models.TextField(default="")
     start_time = models.DateTimeField()
-
-    @property
-    def end_time(self):
-        return self.start_time + timedelta(hours=1)

@@ -37,15 +37,14 @@ def main():
         service = build('calendar', 'v3', credentials=creds)
 
         event = {
-          'summary': 'Veivel Ganteng',
-          'location': '800 Howard St., San Francisco, CA 94103',
+          'summary': 'Financial Advisor Meet',
           'description': 'A chance to hear more about Google\'s developer products.',
           'start': {
-            'dateTime': '2023-07-30T09:00:00-07:00',
+            'dateTime': '2023-07-30T15:00:00+07:00',
             'timeZone': 'Asia/Jakarta',
           },
           'end': {
-            'dateTime': '2023-07-30T10:00:00-07:00',
+            'dateTime': '2023-07-30T16:00:00+07:00',
             'timeZone': 'Asia/Jakarta',
           },
           'attendees': [
@@ -58,10 +57,19 @@ def main():
               {'method': 'popup', 'minutes': 10},
             ],
           },
-        }
+            'conferenceData': {
+                'createRequest': {
+                    'requestId': 'sample123',  # You can generate this randomly
+                    'conferenceSolutionKey': {
+                        'type': 'hangoutsMeet'
+                    },
+                },
+            },
 
-        event = service.events().insert(calendarId='primary', body=event).execute()
+        }
+        event = service.events().insert(calendarId='primary', conferenceDataVersion=1, body=event).execute()
         print('Event created: %s' % (event.get('htmlLink')))
+        print('Google Meet Link: %s' % (event['conferenceData']['entryPoints'][0]['uri']))
 
     except HttpError as error:
         print('An error occurred: %s' % error)
