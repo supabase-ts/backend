@@ -32,6 +32,7 @@ CORS_ORIGIN_WHITELIST = (
    'http://localhost:3001',
    'http://127.0.0.1',
    'https://supabank.vercel.app',
+   'https://supabank-ts.vercel.app/'
 )
 
 # Application definition
@@ -87,11 +88,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': '6nIoRHqSd981DRr8RolR',
+        'HOST': 'containers-us-west-112.railway.app',
+        'PORT': '6754',
     }
 }
-
 
 
 # Password validation
