@@ -26,13 +26,17 @@ SECRET_KEY = 'django-insecure-bz8wozn(yqccvgj4q2b!jvkf35gz+_j83e%%^x0ay(a9knigqo
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = (
-   'http://localhost:3000',
-   'http://localhost:3001',
-   'http://127.0.0.1',
-   'https://supabank-ts.vercel.app',
-)
+CORS_ALLOW_ALL_ORIGINS = False
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1",
+    "https://supabank.vercel.app",
+    "https://supabank-ts.vercel.app"
+]
+
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
@@ -56,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
