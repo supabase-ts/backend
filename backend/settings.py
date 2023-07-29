@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'user',
+    'corsheaders'
 ]
 
 # User Model
