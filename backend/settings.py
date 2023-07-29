@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-bz8wozn(yqccvgj4q2b!jvkf35gz+_j83e%%^x0ay(a9knigqo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'supabank-be.fly.dev',
+]
 
 
 # Application definition
