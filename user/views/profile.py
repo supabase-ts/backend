@@ -4,6 +4,9 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from user.models import User
+from user.serializers.features import UserSerializer
+
 
 class MoneyInOutAPIView(GenericAPIView):
     permission_classes = [AllowAny,]
@@ -33,3 +36,11 @@ class MoneyInOutAPIView(GenericAPIView):
             return Response({"total_in": total_in, "total_out": total_out}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "Unable to fetch transaction data."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetUserAPIView(GenericAPIView):
+    def get(self, request):
+        account_no = request.data.get('accountNo')
+        user = User.objects.filter(account_no=account_no).first()
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)

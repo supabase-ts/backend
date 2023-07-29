@@ -14,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
             'birth_date',
             'gender',
             'account_no',
+            'token',
         )
 
 
