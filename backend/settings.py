@@ -32,7 +32,7 @@ CORS_ORIGIN_WHITELIST = (
    'http://localhost:3001',
    'http://127.0.0.1',
    'https://supabank.vercel.app',
-   'https://supabank-ts.vercel.app/'
+   'https://supabank-ts.vercel.app'
 )
 
 # Application definition
