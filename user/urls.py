@@ -3,7 +3,7 @@ from django.urls import path
 from user.views.appointment import AppointmentAPIView
 from user.views.authentication import RegisterAPIView, LoginAPIView
 from user.views.features import ChatbotAPIView, MatchmakingAPIView
-from user.views.profile import MoneyInOutAPIView
+from user.views.profile import MoneyInOutAPIView, GetUserAPIView
 
 urlpatterns = [
     path('register/', RegisterAPIView.as_view(), name='register'),
@@ -12,4 +12,5 @@ urlpatterns = [
     path('in-out/', MoneyInOutAPIView.as_view(), name='in-out'),
     path('matchmaking/', MatchmakingAPIView.as_view(), name='matchmaker'),
     path('appointment/', AppointmentAPIView.as_view(), name='appointment'),
+    path('get/', GetUserAPIView.as_view(), name='get-user'),
 ]
