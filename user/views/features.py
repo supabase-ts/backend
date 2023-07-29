@@ -1,6 +1,5 @@
 import cohere
 import numpy as np
-from django.http import JsonResponse
 from easygoogletranslate import EasyGoogleTranslate
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
@@ -11,13 +10,13 @@ from user.models import Advisor
 from user.serializers.features import AdvisorSerializer
 
 co = cohere.Client(COHERE_KEY)
-translator = EasyGoogleTranslate(
+translator_id_to_en = EasyGoogleTranslate(
     source_language='id',
     target_language='en',
     timeout=10
 )
 
-translator2 = EasyGoogleTranslate(
+translator_en_to_id = EasyGoogleTranslate(
     source_language='en',
     target_language='id',
     timeout=10
@@ -27,7 +26,10 @@ translator2 = EasyGoogleTranslate(
 class ChatbotAPIView(GenericAPIView):
     def post(self, request):
         user_prompt = request.data['user_prompt']
-        user_prompt = translator.translate(user_prompt)
+        language = request.data['language']
+
+        if language == 'id':
+            user_prompt = translator_id_to_en.translate(user_prompt)
 
         prompt = BASE_PROMPT + f"The user's response is as follows: \n'{user_prompt}'"
 
@@ -40,7 +42,11 @@ class ChatbotAPIView(GenericAPIView):
         )
 
         response_text = response.generations
-        translated_response = translator2.translate(response_text[0])
+
+        translated_response = response_text[0]
+        if language == 'id':
+            translated_response = translator_en_to_id.translate(response_text[0])
+
         return Response({"message": translated_response}, status=status.HTTP_200_OK)
 
 
@@ -96,4 +102,4 @@ class MatchmakingAPIView(GenericAPIView):
         top_advisors_serializer = AdvisorSerializer(top_advisors_objects, many=True)
 
         # Return the serialized data
-        return JsonResponse({'top_advisors': top_advisors_serializer.data})
+        return Response({'top_advisors': top_advisors_serializer.data})
