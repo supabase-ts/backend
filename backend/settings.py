@@ -25,10 +25,14 @@ SECRET_KEY = 'django-insecure-bz8wozn(yqccvgj4q2b!jvkf35gz+_j83e%%^x0ay(a9knigqo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'supabank-be.fly.dev',
-]
-
+ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+   'http://localhost:3000',
+   'http://localhost:3001',
+   'http://127.0.0.1',
+   'https://supabank.vercel.app',
+)
 
 # Application definition
 
@@ -82,8 +86,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': '8i35MfrUotjHJwmoPmaZ',
+        'HOST': 'containers-us-west-50.railway.app',
+        'PORT': '7083',
     }
 }
 
