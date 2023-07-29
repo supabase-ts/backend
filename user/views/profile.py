@@ -40,7 +40,17 @@ class MoneyInOutAPIView(GenericAPIView):
 
 class GetUserAPIView(GenericAPIView):
     def get(self, request):
-        account_no = request.data.get('accountNo')
-        user = User.objects.filter(account_no=account_no).first()
+        bearer_token = request.headers.get('Authorization')
+        if bearer_token and bearer_token.startswith('Bearer '):
+            token = bearer_token.split(' ')[1]
+        else:
+            return Response({'error': 'Invalid or missing bearer token.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.filter(token=token).first()
+        if not user:
+            return Response({'error': 'No user associated with this token.'},
+                            status=status.HTTP_404_NOT_FOUND)
+
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
