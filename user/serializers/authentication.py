@@ -20,6 +20,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             'phone_number',
             'birth_date',
             'gender',
+            'account_no',
+            'token',
         )
 
     def to_internal_value(self, data):
@@ -48,6 +50,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url_register, headers=headers, json=payload)
+
+        print(response.json())
 
         if not response.json()['success']:
             raise serializers.ValidationError('Error in external registration')

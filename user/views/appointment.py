@@ -12,6 +12,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
 from user.models import User, Advisor, Appointment
+from user.serializers.appointment import AppointmentSerializer
 
 
 class AppointmentAPIView(GenericAPIView):
@@ -48,8 +49,12 @@ class AppointmentAPIView(GenericAPIView):
             customer=customer, advisor=advisor, meet_url=meet_url, start_time=start_time
         )
 
-        return Response({"success": f"Appointment created with id {appointment.id}"},
-                        status=status.HTTP_201_CREATED)
+        serializer = AppointmentSerializer(appointment)
+
+        return Response({
+            "success": f"Appointment created with id {appointment.id}",
+            "appointment": serializer.data,
+        }, status=status.HTTP_201_CREATED)
 
     def create_meet_event(self, customer_email, advisor_email, start_time):
         SCOPES = ['https://www.googleapis.com/auth/calendar']

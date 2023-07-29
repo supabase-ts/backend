@@ -3,6 +3,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
 from user.serializers.authentication import RegisterSerializer, LoginSerializer
+from user.serializers.features import UserSerializer
 
 
 class RegisterAPIView(GenericAPIView):
@@ -33,4 +34,8 @@ class LoginAPIView(GenericAPIView):
         user.token = access_token
         user.save()
 
-        return Response({"message": "Logged in successfully", "access_token": access_token}, status=status.HTTP_200_OK)
+        return Response({
+            "message": "Logged in successfully",
+            "access_token": access_token,
+            "user": UserSerializer(user).data,
+        }, status=status.HTTP_200_OK)
