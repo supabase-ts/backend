@@ -35,7 +35,7 @@ class ChatbotAPIView(GenericAPIView):
 
         response = co.generate(
             prompt=prompt,
-            max_tokens=128,
+            max_tokens=64,
             temperature=0.25,
             frequency_penalty=0.6,
             presence_penalty=0.6,

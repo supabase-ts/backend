@@ -77,8 +77,8 @@ class AppointmentAPIView(GenericAPIView):
             end_time_str = self.add_one_hour(start_time)
 
             event = {
-                'summary': 'Financial Advisor Meet',
-                'description': 'A chance to hear more about Google\'s developer products.',
+                'summary': 'SupaCoach-Expert Financial Advisor Meet',
+                'description': 'Meeting with one of SupaBank\'s expert financial advisor',
                 'start': {
                     'dateTime': start_time_str,
                     'timeZone': 'Asia/Jakarta',
